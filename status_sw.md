@@ -38,7 +38,7 @@ def 赛道元素处理(img,ss)->img:
     # 并且也更新状态机
     match ss.圆坏:
         case 圆坏状态.未发现:
-            bool=发现圆坏(边界,img)
+            bool,img=发现圆坏(边界,img)
             if bool:
                 ss.圆坏=圆坏状态.已发现
                 # 把圆到靠近车这条线补了
