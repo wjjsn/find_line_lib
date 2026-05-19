@@ -8,3 +8,12 @@ dependencies = [
     "numpy>=2.4.5",
     "opencv-python>=4.13.0.92",
 ]
+
+[dependency-groups]
+dev = [
+    "pillow>=12.2.0",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "pytest-image-diff>=0.0.14",
+    "pytest-regressions[num-image]>=2.10.0",
+]
