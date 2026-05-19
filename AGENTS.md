@@ -1,0 +1,2 @@
+- 这个文件夹在Windows目录下，请使用`uv.exe add <xxx>`和`uv.exe run <xxx>`来代替`uv`
+- 这个文件夹在Windows目录下，路径是`/mnt/c/Users/wjjsn/Desktop/code/boss`，你应该这样执行命令`cd /mnt/c/Users/wjjsn/Desktop/code/boss && <你要执行的命令>`
