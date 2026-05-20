@@ -39,12 +39,20 @@ def get_start_point(
             if bin_img[current_row, col] == 255 and bin_img[current_row, col - 1] == 0:
                 left_point = (col, current_row)
                 break
+        else:
+            # 情况B（补丁）：如果循环正常走完没突破，且中心点是白的，说明从中心到左边界全白
+            if bin_img[current_row, center_col] == 255:
+                left_point = (col_min, current_row) 
 
         # 4. 在当前行【向右】寻找跳变点
         for col in range(center_col, col_max):
             if bin_img[current_row, col] == 255 and bin_img[current_row, col + 1] == 0:
                 right_point = (col, current_row)
                 break
+        else:
+            # 情况B（补丁）：如果循环正常走完没突破，且中心点是白的，说明从中心到右边界全白
+            if bin_img[current_row, center_col] == 255:
+                right_point = (col_max, current_row)
 
         # 5. 检查当前行是否同时找到了左右边界
         if left_point is not None and right_point is not None:
