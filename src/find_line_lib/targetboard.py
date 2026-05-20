@@ -173,7 +173,7 @@ def 检查目标板(rgb_img: MatLike,ss) -> tuple[np.ndarray, np.ndarray, np.nda
     points = best_cnt.reshape(-1, 2)
     return find_corner_points(points)
 
-# 改成接收原图，和start_point，把线画原图上去，不要在里面再算一遍start_point
+# 改成接收原图，和start_point，返回两个点，不要把线画原图上去，不要在里面再算一遍start_point
 def 根据识别状态补线(bin_img: MatLike, ss: status_switcher, targetboard_point: tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]) -> MatLike:
     # 1. 严格对应上一个函数的返回顺序：tl, tr, br, bl (左上, 右上, 右下, 左下)
     tl, tr, br, bl = targetboard_point
@@ -194,15 +194,14 @@ def 根据识别状态补线(bin_img: MatLike, ss: status_switcher, targetboard_
 
     # 2. 理顺业务逻辑
     if ss.模型识别 == 模型识别状态.左:
-        # 向左转/识别为左，通常是用右边的起点(rx, ry)去连【右下角】(br)
-        # 或者用左边的起点(lx, ly)去连【左下角】(bl)，这里根据你的业务调整
-        # 我们假设你是想用右起点连右下角：
+        # 向左转/识别为左，通常是用右边的起点(rx, ry)去连【左下角】(bl)
+        # 或者用左边的起点(lx, ly)去连【左下角】(bl)
         br_x, br_y = int(bl.ravel()[0]), int(bl.ravel()[1])
         cv2.line(bin_img, (rx, ry), (br_x, br_y), (0, 255, 0), 2)
         return bin_img
         
     if ss.模型识别 == 模型识别状态.右:
-        # 向右转/识别为右，通常是用左边的起点(lx, ly)去连【左下角】(bl)
+        # 向右转/识别为右，通常是用左边的起点(lx, ly)去连【右下角】(br)
         bl_x, bl_y = int(br.ravel()[0]), int(br.ravel()[1])
         cv2.line(bin_img, (lx, ly), (bl_x, bl_y), (0, 255, 0), 2)
         return bin_img
