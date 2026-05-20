@@ -18,8 +18,8 @@ if __name__ == "__main__":
         get_start_point_result = get_start_point(bin_img)
         if get_start_point_result is not None:
             start_point_l, start_point_r = get_start_point_result
-            cv2.circle(img, (start_point_l[0] + 2, start_point_l[1]), 3, (0, 0, 255), -1)
-            cv2.circle(img, (start_point_r[0] - 2, start_point_r[1]), 3, (255, 0, 0), -1)
+            cv2.circle(img, (start_point_l[0], start_point_l[1]), 3, (0, 0, 255), -1)
+            cv2.circle(img, (start_point_r[0], start_point_r[1]), 3, (255, 0, 0), -1)
             cv2.imshow("img", img)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
