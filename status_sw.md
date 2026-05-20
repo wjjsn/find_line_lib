@@ -86,9 +86,8 @@ def 赛道元素处理(img,ss)->img:
         case _:
             pass
     
-def 找直行路(边界,img,ss):
-
-def 找三条路(边界,直行路,目标板红色区域坐标,ss):
+def 找直行路(img,ss)->np.ndarray（[n][2]n个点）:
+    #拿到补好线图片跑一遍八邻域，找到边界线，算中线，返回结果
     
 
 def main()
@@ -97,14 +96,7 @@ def main()
     while True:
         rgb_img=opencv读取()
         img=赛道元素处理(rgb_img,ss)
-        边界:np.ndarray（[2][n][2]两条线，n个点）=找边界(img)
-        b_有无目标板,目标板红色区域坐标=检查有无目标板(rgb_img)
-        直行路:np.ndarray（[n][2]n个点）=找直行路(边界,img,ss)
-        if b_有无目标板:
-            左,右:np.ndarray（[n][2]n个点）=找三条路(边界,直行路,目标板红色区域坐标,ss)
-            最终用线=检测GPIO(左,右,直行路)
-        else:
-            最终用线=直行路
+        最终用线:np.ndarray（[n][2]n个点）=找直行路(img,ss)
         
         left_speed, right_speed = calculateWheelSpeeds(最终用线)
         print(打印速度)
