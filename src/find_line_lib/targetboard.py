@@ -175,7 +175,7 @@ def 检查目标板(rgb_img: MatLike,ss) -> tuple[np.ndarray, np.ndarray, np.nda
 
 def 根据识别状态补线(
     ss: status_switcher, 
-    start_point: tuple[np.ndarray, np.ndarray] | None, 
+    start_point: tuple[tuple[int, int], tuple[int, int]] | None, 
     targetboard_point: tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]
 ) -> tuple[tuple[int, int], tuple[int, int]] | None:
     """
@@ -197,19 +197,16 @@ def 根据识别状态补线(
         return None
         
     left_point, right_point = start_point
-    # 安全转换起点的类型为原生 int
-    lx, ly = int(left_point[0]), int(left_point[1])
-    rx, ry = int(right_point[0]), int(right_point[1])
-
+    
     # 2. 理顺业务逻辑并返回两个端点坐标
     if ss.模型识别 == 模型识别状态.左:
-        # 向左转/识别为左，通常是用右边的起点(rx, ry)去连【左下角】(bl)
+        # 向左转/识别为左，通常是用右边的起点right_point去连【左下角】(bl)
         bl_x, bl_y = int(bl.ravel()[0]), int(bl.ravel()[1])
-        return (rx, ry), (bl_x, bl_y)
+        return right_point, (bl_x, bl_y)
         
     if ss.模型识别 == 模型识别状态.右:
-        # 向右转/识别为右，通常是用左边的起点(lx, ly)去连【右下角】(br)
+        # 向右转/识别为右，通常是用左边的起点left_point去连【右下角】(br)
         br_x, br_y = int(br.ravel()[0]), int(br.ravel()[1])
-        return (lx, ly), (br_x, br_y)
+        return left_point, (br_x, br_y)
 
     return None
