@@ -3,7 +3,7 @@ import cv2
 from cv2.typing import MatLike
 import numpy as np
 from find_line_lib.status_switcher import status_switcher, 模型识别状态
-from find_line_lib.get_start_point import get_start_point
+
 
 
 def create_red_mask(
@@ -173,37 +173,43 @@ def 检查目标板(rgb_img: MatLike,ss) -> tuple[np.ndarray, np.ndarray, np.nda
     points = best_cnt.reshape(-1, 2)
     return find_corner_points(points)
 
-# 改成接收原图，和start_point，返回两个点，不要把线画原图上去，不要在里面再算一遍start_point
-def 根据识别状态补线(bin_img: MatLike, ss: status_switcher, targetboard_point: tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]) -> MatLike:
+def 根据识别状态补线(
+    ss: status_switcher, 
+    start_point: tuple[np.ndarray, np.ndarray] | None, 
+    targetboard_point: tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]
+) -> tuple[tuple[int, int], tuple[int, int]] | None:
+    """
+    根据识别状态计算补线的两个端点。
+    不再直接修改图像，不重复计算 start_point。
+    
+    返回:
+        ((x1, y1), (x2, y2)) -> 补线的起点和终点
+        None -> 不需要补线或缺少起点信息
+    """
     # 1. 严格对应上一个函数的返回顺序：tl, tr, br, bl (左上, 右上, 右下, 左下)
     tl, tr, br, bl = targetboard_point
-    bin_img = bin_img.copy()
     
     if ss.模型识别 == 模型识别状态.未发现 or ss.模型识别 == 模型识别状态.直行:
-        return bin_img
+        return None
         
-    # 获取补线的起点
-    result = get_start_point(bin_img)
-    if result is None:
-        return bin_img
+    # 如果外部传入的 start_point 为 None，直接返回 None
+    if start_point is None:
+        return None
         
-    left_point, right_point = result
+    left_point, right_point = start_point
     # 安全转换起点的类型为原生 int
     lx, ly = int(left_point[0]), int(left_point[1])
     rx, ry = int(right_point[0]), int(right_point[1])
 
-    # 2. 理顺业务逻辑
+    # 2. 理顺业务逻辑并返回两个端点坐标
     if ss.模型识别 == 模型识别状态.左:
         # 向左转/识别为左，通常是用右边的起点(rx, ry)去连【左下角】(bl)
-        # 或者用左边的起点(lx, ly)去连【左下角】(bl)
-        br_x, br_y = int(bl.ravel()[0]), int(bl.ravel()[1])
-        cv2.line(bin_img, (rx, ry), (br_x, br_y), (0, 255, 0), 2)
-        return bin_img
+        bl_x, bl_y = int(bl.ravel()[0]), int(bl.ravel()[1])
+        return (rx, ry), (bl_x, bl_y)
         
     if ss.模型识别 == 模型识别状态.右:
         # 向右转/识别为右，通常是用左边的起点(lx, ly)去连【右下角】(br)
-        bl_x, bl_y = int(br.ravel()[0]), int(br.ravel()[1])
-        cv2.line(bin_img, (lx, ly), (bl_x, bl_y), (0, 255, 0), 2)
-        return bin_img
+        br_x, br_y = int(br.ravel()[0]), int(br.ravel()[1])
+        return (lx, ly), (br_x, br_y)
 
-    return bin_img
+    return None
