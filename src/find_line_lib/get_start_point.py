@@ -5,7 +5,7 @@ def get_start_point(
     start_row: int | None = None,
     left_limit: int | None = None,
     right_limit: int | None = None
-) -> tuple[np.ndarray, np.ndarray] | None:
+) -> tuple[tuple[int, int], tuple[int, int]] | None:
     """
     从指定行开始向上逐行扫描，寻找赛道（白色区域）的左右边界起始点。
 
@@ -37,13 +37,13 @@ def get_start_point(
         # 3. 在当前行【向左】寻找跳变点
         for col in range(center_col, col_min, -1):
             if bin_img[current_row, col] == 255 and bin_img[current_row, col - 1] == 0:
-                left_point = np.array([col, current_row])
+                left_point = (col, current_row)
                 break
 
         # 4. 在当前行【向右】寻找跳变点
         for col in range(center_col, col_max):
             if bin_img[current_row, col] == 255 and bin_img[current_row, col + 1] == 0:
-                right_point = np.array([col, current_row])
+                right_point = (col, current_row)
                 break
 
         # 5. 检查当前行是否同时找到了左右边界
