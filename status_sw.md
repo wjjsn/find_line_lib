@@ -10,13 +10,16 @@ class 圆坏状态(Enum):
     出环中 = auto()
     未发现 = auto()
 
-class status_switcher()
-    def __init__()
-        self.普通道路=True #无其它元素
-        self.发现目标板=False
-        self.已识别目标板类型=False
-        self.发现路障=False
+class 模型识别状态(Enum):
+    未发现 = auto()
+    左 = auto()
+    直行 = auto()
+    右 = auto()
+
+class status_switcher():
+    def __init__(self):
         self.圆坏=圆坏状态.未发现
+        self.模型识别=模型识别状态.未发现
 
 def calculateWheelSpeeds(line: np.ndarray) -> tuple[int, int]:
     
@@ -31,9 +34,36 @@ def 检查路障(img,用于判断两个黑块多近算近的阈值)->img:
     # 将挨着两个挨着很近的黑块的中间直接涂黑
     return img
 
+def 读取模型识别状态(ss):
+    test=1
+    match test:
+        case 1:
+            ss.模型识别=模型识别状态.未发现
+        case 2:
+            ss.模型识别=模型识别状态.左
+        case 3:
+            ss.模型识别=模型识别状态.直行
+        case 4:
+            ss.模型识别=模型识别状态.右
+
+def 检查目标板(img,ss)->img:
+    #检查一遍目标板
+    if 检查成功:
+        读取模型识别状态(ss)
+        match ss.模型识别:
+            case 模型识别状态.未发现:
+                # 降低base_speed，等待识别
+            case 模型识别状态.左:
+                #把左边的线补了
+            case 模型识别状态.直行:
+                pass
+            case 模型识别状态.右:
+                #把右边的线补了
+    return img
+
 def 赛道元素处理(img,ss)->img:
     img=检查路障(img)
-    
+    img=检查目标板(img,ss)
     # 每个case都要对图像进行处理，方便后续找边界
     # 并且也更新状态机
     match ss.圆坏:
