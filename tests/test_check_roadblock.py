@@ -28,10 +28,12 @@ def test_check_roadblock(image_regression):
 
 
 if __name__ == "__main__":
-    for img_file in ["png/roadblock_left.jpg", "png/roadblock_right.jpg"]:
+    import glob
+    
+    for img_file in glob.glob("png/*.jpg"):
         img = cv.imread(img_file)
         assert img is not None
-        img = cv.resize(img, (640, 480))
+        img = cv.resize(img, (160, 120))
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         _, bin_img = cv.threshold(gray, 127, 255, cv.THRESH_BINARY)
     
@@ -39,8 +41,11 @@ if __name__ == "__main__":
         get_start_point_result = get_start_point(bin_img, (h-1,w//2))
         assert get_start_point_result is not None
     
-        result = 检查路障(bin_img, get_start_point_result, 150)
-        assert result is not None
+        result = 检查路障(bin_img, get_start_point_result, 60)
+        if result is None:
+            cv.imshow("result", img)
+            cv.waitKey(0)
+            continue
     
         p1, p2 = result
         cv.line(img, p1, p2, (0, 0, 255), 2)
