@@ -4,7 +4,11 @@ import cv2
 from cv2.typing import MatLike
 from numpy import logical_xor
 
+<<<<<<< HEAD
 def 发现圆坏(bin_img: MatLike, spilt: int=9) -> tuple[tuple[int, int], tuple[int, int]] | None:
+=======
+def 发现圆坏(bin_img: MatLike, spilt: int) ->tuple[ tuple[tuple[int, int], tuple[int, int]],tuple[tuple[int, int], tuple[int, int]]]| None:
+>>>>>>> a3be03e (找到2判断点)
     h, w = bin_img.shape[:2]
     spilt_height = h/spilt
     start_row = int(spilt_height*(spilt//2))
@@ -24,7 +28,9 @@ def 发现圆坏(bin_img: MatLike, spilt: int=9) -> tuple[tuple[int, int], tuple
 
     if min_width_point == ((0, 0), (0, 0)):
         return None
+    group1 = min_width_point
 
+<<<<<<< HEAD
     return min_width_point
 
 
@@ -110,3 +116,25 @@ def 准备出环(bin_img: MatLike, status_switcher: status_switcher, start_point
             else:
                 print("突变过小，可能是十字")
                 return None
+=======
+    start_row = int(spilt_height * (spilt - 1))
+    end_row = h  
+    
+    min_width = w
+    min_width_point:tuple[tuple[int, int], tuple[int, int]]=(0, 0), (0, 0)
+    for row in range(start_row, end_row):
+        result = get_start_point(bin_img, start_point=(row, w // 2))
+        if result is not None:
+            lp,rp = result
+            lx,ly = lp
+            rx,ry = rp
+            if rx - lx < min_width:
+                min_width = rx - lx
+                min_width_point=result
+
+    if min_width_point == ((0, 0), (0, 0)):
+        return None
+    group2 = min_width_point
+
+    return group1, group2
+>>>>>>> a3be03e (找到2判断点)

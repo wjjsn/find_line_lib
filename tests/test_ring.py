@@ -8,17 +8,24 @@ if __name__ == '__main__':
     gray = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2GRAY)
     _, bin_img = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
-    result = 发现圆坏(bin_img,9)
-    assert result is not None
+    res = 发现圆坏(bin_img, 9)
+    assert res is not None
 
-    lp, rp = result
+    result1, result2 = res
+    lp, rp = result1
+    xlp, xrp = result2
 
     cv2.circle(rgb_img, lp, 3, (0, 0, 255), -1)
     cv2.circle(rgb_img, rp, 3, (255, 0, 0), -1)
+    cv2.circle(rgb_img, xlp, 3, (0, 0, 255), -1)
+    cv2.circle(rgb_img, xrp, 3, (255, 0, 0), -1)
+    cv2.line(rgb_img, xlp, xrp, (255, 0, 0), 2)
+    cv2.line(rgb_img, lp, rp, (0, 0, 255), 2)
     cv2.imshow('rgb_img', rgb_img)
     cv2.waitKey(0)
 
     cv2.destroyAllWindows()
+<<<<<<< HEAD
     ######################################################################
     # 测试**准备入环**
     # 
@@ -65,3 +72,7 @@ if __name__ == '__main__':
         print(result)
     cv2.destroyAllWindows()
     
+=======
+    print("中部边界点对 (result1):", result1)
+    print("底部边界点对 (result2):", result2)
+>>>>>>> a3be03e (找到2判断点)
