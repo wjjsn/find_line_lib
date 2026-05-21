@@ -25,3 +25,22 @@ def 发现圆坏(bin_img: MatLike, spilt: int) -> tuple[tuple[int, int], tuple[i
         return None
 
     return min_width_point
+
+
+def 准备入环(bin_img: MatLike, 跳变阈值: int=50, 从多高开始往下扫: int=50) -> tuple[tuple[int, int], tuple[int, int]] | None:
+    h, w = bin_img.shape[:2]
+
+    线长=[]
+    线长对应点索引=[]
+
+    for row in range(从多高开始往下扫, h-1, 4):
+        result = get_start_point(bin_img, start_point=(row, w // 2))
+        if result is not None:
+            lp, rp = result
+            线长.append(rp[0] - lp[0])
+            线长对应点索引.append(result)
+
+    for i in range(1, len(线长)):
+        if 线长[i] - 线长[i-1] > 跳变阈值:
+            print(线长[i] - 线长[i-1])
+            return 线长对应点索引[i-1]
