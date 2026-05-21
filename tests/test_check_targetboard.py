@@ -26,7 +26,8 @@ if __name__ == "__main__":
     _, bin_img = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
     # 按照新逻辑：在外部只计算一次 start_point
-    start_point_result = get_start_point(bin_img)
+    h, w = bin_img.shape[:2]
+    start_point_result = get_start_point(bin_img, (h-1,w//2))
 
     for status in 模型识别状态:
         ss.模型识别 = status

@@ -7,9 +7,10 @@ def test_check_roadblock(image_regression):
     img = cv.imread("png/roadblock.jpg")
     assert img is not None
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    _, img = cv.threshold(gray, 127, 255, cv.THRESH_BINARY)
+    _, bin_img = cv.threshold(gray, 127, 255, cv.THRESH_BINARY)
 
-    get_start_point_result = get_start_point(img)
+    h, w = bin_img.shape[:2]
+    start_point_result = get_start_point(bin_img, (h-1,w//2))
     assert get_start_point_result is not None
 
     # TODO : 阈值改为分辨率自适应
@@ -32,12 +33,13 @@ if __name__ == "__main__":
         assert img is not None
         img = cv.resize(img, (640, 480))
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-        _, img = cv.threshold(gray, 127, 255, cv.THRESH_BINARY)
+        _, bin_img = cv.threshold(gray, 127, 255, cv.THRESH_BINARY)
     
-        get_start_point_result = get_start_point(img)
+        h, w = bin_img.shape[:2]
+        get_start_point_result = get_start_point(bin_img, (h-1,w//2))
         assert get_start_point_result is not None
     
-        result = 检查路障(img, get_start_point_result, 150)
+        result = 检查路障(bin_img, get_start_point_result, 150)
         assert result is not None
     
         p1, p2 = result
