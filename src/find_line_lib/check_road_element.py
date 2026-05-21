@@ -1,23 +1,29 @@
 from enum import Enum,auto
 from find_line_lib.check_roadblock import 检查路障
+from find_line_lib.targetboard import 检查目标板
+from cv2.typing import MatLike
+from find_line_lib.status_switcher import status_switcher,圆坏状态,目标板状态
 
 
-class 圆坏状态(Enum):
-    已发现 = auto()
-    准备入环 = auto()
-    # 已入环 = auto()
-    准备出环 = auto()
-    出环中 = auto()
-    未发现 = auto()
-
-def 赛道元素处理(img,ss)->img:
-    img=检查路障(img,15)
+def 赛道元素处理(img: MatLike,ss: status_switcher)->MatLike:
+    img=检查路障(img)
+    img=检查目标板(img,ss)
+    match ss.目标板:
+        case 目标板状态.未发现:
+            #尝试发现目标板
+            pass
+        case 目标板状态.已发现
+            #根据识别状态补线()
+            pass
+        case 目标板状态.通过中:
+            #继续补线，直到红色区域消失,状态变为未发现
+            pass
     
     # 每个case都要对图像进行处理，方便后续找边界
     # 并且也更新状态机
     match ss.圆坏:
         case 圆坏状态.未发现:
-            bool=发现圆坏(边界,img)
+            bool,img=发现圆坏(边界,img)
             if bool:
                 ss.圆坏=圆坏状态.已发现
                 # 把圆到靠近车这条线补了
@@ -34,3 +40,4 @@ def 赛道元素处理(img,ss)->img:
             # 完全出了标记ss.圆坏=圆坏状态.未发现
         case _:
             pass
+    return img
