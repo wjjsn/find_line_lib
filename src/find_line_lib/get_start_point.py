@@ -8,7 +8,7 @@ def get_start_point(
     right_limit: int | None = None,
     upper_limit: int | None = None,
     lower_limit: int | None = None,
-    direction: Literal["horizontal", "vertical"] = "vertical"
+    direction: Literal["horizontal", "vertical"] = "horizontal"
 ) -> tuple[tuple[int, int], tuple[int, int]] | None:
     """
     从指定行开始向上逐行扫描，寻找赛道（白色区域）的左右边界起始点。
