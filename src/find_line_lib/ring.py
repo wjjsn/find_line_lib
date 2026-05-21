@@ -3,7 +3,7 @@ import cv2
 from cv2.typing import MatLike
 from numpy import logical_xor
 
-def 发现圆坏(bin_img: MatLike, spilt: int) -> tuple[tuple[int, int], tuple[int, int]] | None:
+def 发现圆坏(bin_img: MatLike, spilt: int=9) -> tuple[tuple[int, int], tuple[int, int]] | None:
     h, w = bin_img.shape[:2]
     spilt_height = h/spilt
     start_row = int(spilt_height*(spilt//2))
