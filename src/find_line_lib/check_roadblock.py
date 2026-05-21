@@ -16,6 +16,7 @@ def 检查路障(binary_img: MatLike, start_point: tuple[tuple[int, int], tuple[
         如果触发右侧路障，返回 (右起点, 黑块左下角点)
         否则返回 None
     """
+    h, w = binary_img.shape[:2]
     左起点, 右起点 = start_point
     x_left, y_left = 左起点
     x_right, y_right = 右起点
@@ -34,7 +35,7 @@ def 检查路障(binary_img: MatLike, start_point: tuple[tuple[int, int], tuple[
         bx, by, bw, bh, area = stats[i]
         
         # 过滤噪点
-        if area < 4:
+        if area < 100:
             continue
             
         # 过滤掉贴着图像最左和最右两侧的“赛道外全黑背景”
@@ -67,6 +68,8 @@ def 检查路障(binary_img: MatLike, start_point: tuple[tuple[int, int], tuple[
         max_x_at_max_y, max_y = x_coords[idx_se], y_coords[idx_se]
         
         黑块右下角点 = (int(max_x_at_max_y), int(max_y))
+        if 黑块右下角点[1] < h//2:
+            return None
         return (左起点, 黑块右下角点)
 
     # --- 情况 B：路障在右边，挨右边界太近 ---
@@ -79,6 +82,8 @@ def 检查路障(binary_img: MatLike, start_point: tuple[tuple[int, int], tuple[
         min_x_at_max_y, max_y = x_coords[idx_sw], y_coords[idx_sw]
         
         黑块左下角点 = (int(min_x_at_max_y), int(max_y))
+        if 黑块左下角点[1] < h//2:
+            return None
         return (右起点, 黑块左下角点)
 
     return None
