@@ -17,26 +17,26 @@ if __name__ == "__main__":
     ss = status_switcher()
     ss.模型识别 = 模型识别状态.左
     assert img is not None
-    
+
     result = 检查目标板(img, ss)
     assert result is not None
 
     # 生成二值化图提供给 get_start_point 提取起点
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, bin_img = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
-    
+
     # 按照新逻辑：在外部只计算一次 start_point
     start_point_result = get_start_point(bin_img)
 
     for status in 模型识别状态:
         ss.模型识别 = status
-        
+
         # 复制一份原图用于当前的测试可视化，不污染原图
         show_img = img.copy()
-        
+
         # 调用新函数获取线段端点
         line_pts = 根据识别状态补线(ss, start_point_result, result)
-        
+
         # 如果返回了具体的点，在测试画布上画出来
         if line_pts is not None:
             p1, p2 = line_pts
@@ -44,8 +44,8 @@ if __name__ == "__main__":
             print(f"状态【{status}】: 成功获取补线点 {p1} -> {p2}")
         else:
             print(f"状态【{status}】: 无需补线")
-            
+
         cv2.imshow(f"{status}", show_img)
         cv2.waitKey(0)
-        
+
     cv2.destroyAllWindows()
