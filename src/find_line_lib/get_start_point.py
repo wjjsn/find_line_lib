@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from typing import Literal
 
 def get_start_point(
@@ -134,3 +135,91 @@ def get_line_points(p1, p2):
         line_data.append((current_x, y))
         
     return line_data
+
+def tget_midpoint_np(point1, point2):
+    # 使用 // 2 进行整除，直接得到整数类型的 NumPy 数组
+    mid = (np.array(point1) + np.array(point2)) // 2
+    # 转换为元组返回，方便后续解包
+    return (int(mid[0]), int(mid[1]))
+
+
+def 检查边界连续性(
+    points: list[tuple[int, int]], 
+    max_jump: int = 15
+) -> tuple[bool, list[int]]:
+    """
+    检查单边边界线（左边界或右边界）在纵向上的连续性。
+
+    Args:
+        points: 边界点列表，格式必须统一为 [(x1, y1), (x2, y2), ...]
+                要求按照 Y 轴（行）的顺序依次排列（从下到上或从上到下均可）
+        max_jump: 相邻两行之间允许的最大横向（X轴）跳变像素值。超过此值认为是不连续。
+
+    Returns:
+        is_continuous: bool, 整体是否连续
+        break_indices: list[int], 发生断裂（不连续）的位置索引列表
+    """
+    if len(points) < 2:
+        return True, []
+
+    break_indices = []
+    is_continuous = True
+
+    # 遍历所有相邻的点，比对它们的 X 坐标
+    for i in range(len(points) - 1):
+        curr_x, curr_y = points[i]
+        next_x, next_y = points[i + 1]
+
+        # 确保它们确实是相邻行（防止中间漏检），允许 Y 轴方向有方向性步长
+        if abs(next_y - curr_y) > 5: 
+            # 如果行距隔得太远，横向阈值需要等比例放大，或者这里做特殊处理
+            pass
+
+        # 计算横向 X 轴的跳变距离
+        x_distance = abs(next_x - curr_x)
+
+        # 如果跳变超过了设定的最大阈值，判定为不连续
+        if x_distance > max_jump:
+            is_continuous = False
+            break_indices.append(i + 1)  # 记录发生断裂的点索引
+
+    return is_continuous, break_indices
+
+def 检查左右两边连续性(
+    left_line: list[tuple[int, int]], 
+    right_line: list[tuple[int, int]], 
+    max_jump: int = 15
+) -> dict[str, Any]:
+    """
+    同时检查左右两条边界线的连续性状态
+    """
+    # 检查左边
+    left_ok, left_breaks = 检查边界连续性(left_line, max_jump)
+    # 检查右边
+    right_ok, right_breaks = 检查边界连续性(right_line, max_jump)
+    
+    # 综合评估赛道状态
+    track_valid = left_ok and right_ok
+    
+    return {
+        "track_valid": track_valid,       # 赛道两边是否都完美连续
+        "left_continuous": left_ok,       # 左边是否连续
+        "right_continuous": right_ok,     # 右边是否连续
+        "left_break_at": left_breaks,     # 左边断裂处的点索引（方便做丢线保护）
+        "right_break_at": right_breaks    # 右边断裂处的点索引
+    }
+
+def get_distance(p1: tuple[int, int], p2: tuple[int, int]) -> float:
+    """
+    计算两点之间的距离
+    Args:
+        p1: 第一个点 (x1, y1)
+        p2: 第二个点 (x2, y2)
+    Returns:
+        float: 两点之间的浮点数距离
+    """
+    x1, y1 = p1
+    x2, y2 = p2
+    
+    # 欧几里得距离公式
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
