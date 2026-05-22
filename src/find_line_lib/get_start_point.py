@@ -103,3 +103,34 @@ def get_start_point(
 
     # 6. 如果把所有的行都往上翻遍了依然没凑齐左右边界，说明整张图都找不到合格的起始点
     return None
+
+def get_line_points(p1, p2):
+    """
+    数据逻辑连线：传入任意两个点 p1(x1, y1) 和 p2(x2, y2)
+    利用直线方程，计算并返回这两点之间每一行的完整坐标列表。
+    """
+    x1, y1 = p1
+    x2, y2 = p2
+    
+    line_data = []
+    
+    # 确定行（y坐标）的起始和终点
+    start_y = min(y1, y2)
+    end_y = max(y1, y2)
+    
+    total_rows = end_y - start_y
+    
+    for y in range(start_y, end_y + 1):
+        if total_rows == 0:
+            weight = 0
+        else:
+            # 计算当前行在纵向跨度上的比例
+            weight = (y - start_y) / total_rows
+            
+        # 根据比例，计算当前行对应的 x 坐标
+        current_x = int(x1 + (x2 - x1) * weight)
+        
+        # 将每一行的逻辑坐标 (x, y) 存入列表
+        line_data.append((current_x, y))
+        
+    return line_data

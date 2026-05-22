@@ -127,14 +127,70 @@ def 准备出环(bin_img: MatLike, status_switcher: status_switcher, start_point
         if result is not None:
             lp,rp = result
             lx,ly = lp
-            rx,ry = rp
+            rx,ry = rp 
             if rx - lx < min_width:
                 min_width = rx - lx
-                min_width_point=result
+                zx = (lx+rx)//2
+                zy = (ly+ry)//2
+                zhongdian = zx, zy
+                res = get_start_point(
+                    bin_img=bin_img,
+                    start_point=zhongdian,
+                    left_limit=5,
+                    right_limit=w-5,
+                    direction="horizontal"
+                )
+                if res is None:
+                    min_width_point = None  
+                    zlx=0
+                    zrx=zx
+                    if zrx - zlx > min_width//3:
+                        min_width_point=result
+                else:
+                    zl, zr = res
+                    zlx, zly = zl
+                    zrx, zry = zr
+                    if zrx - zlx > min_width//3:
+                        min_width_point=result
 
     if min_width_point == ((0, 0), (0, 0)):
         return None
     group2 = min_width_point
 
     return group1, group2
+<<<<<<< HEAD
 >>>>>>> a3be03e (找到2判断点)
+=======
+
+def 准备入环(bin_img: MatLike, 跳变阈值: int=50, 从多高开始往下扫: int=50) -> tuple[tuple[int, int], tuple[int, int]] | None:
+    h, w = bin_img.shape[:2]
+
+    线长=[]
+    线长对应点索引=[]
+
+    for row in range(从多高开始往下扫, h-1, 4):
+        result = get_start_point(bin_img, start_point=(row, w // 2))
+        if result is not None:
+            lp, rp = result
+            线长.append(rp[0] - lp[0])
+            线长对应点索引.append(result)
+
+    for i in range(1, len(线长)):
+        if 线长[i] - 线长[i-1] > 跳变阈值:
+            print(线长[i] - 线长[i-1])
+            return 线长对应点索引[i-1]
+
+
+def 进入圆坏(bin_img: MatLike, spilt: int) ->tuple[tuple[int, int], tuple[int, int]]]| None:
+    h, w = bin_img.shape[:2]
+    qx,
+
+    for
+    res=get_start_point(
+        bin_img: np.ndarray,
+        start_point: 
+        upper_limit: 
+        lower_limit: 
+        direction:"horizontal"
+    ) 
+>>>>>>> f0dcbbb (发现圆环)
