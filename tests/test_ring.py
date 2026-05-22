@@ -4,7 +4,7 @@ from find_line_lib.status_switcher import status_switcher
 import cv2
 
 if __name__ == '__main__':
-    for img in ["png/found_left_ring.jpg","png/found_right_ring.jpg"]:
+    for img in ["png/found_left_ring.jpg","png/found_right_ring.jpg","png/sz-2.jpg"]:
         rgb_img = cv2.imread(img)
         assert rgb_img is not None
     
@@ -14,19 +14,19 @@ if __name__ == '__main__':
         res = 发现圆坏(bin_img, 9)
         assert res is not None
     
-    result1, result2 = res
+        result1, result2 = res
         lp, rp = result1
-    xlp, xrp = result2
-    
+        xlp, xrp = result2
+        
         cv2.circle(rgb_img, lp, 3, (0, 0, 255), -1)
         cv2.circle(rgb_img, rp, 3, (255, 0, 0), -1)
-    cv2.circle(rgb_img, xlp, 3, (0, 0, 255), -1)2
-    cv2.circle(rgb_img, xrp, 3, (255, 0, 0), -1)
-    cv2.line(rgb_img, xlp, xrp, (255, 0, 0), 2)
-    cv2.line(rgb_img, lp, rp, (0, 0, 255), 2)
+        cv2.circle(rgb_img, xlp, 3, (0, 0, 255), -1)
+        cv2.circle(rgb_img, xrp, 3, (255, 0, 0), -1)
+        cv2.line(rgb_img, xlp, xrp, (255, 0, 0), 2)
+        cv2.line(rgb_img, lp, rp, (0, 0, 255), 2)
         cv2.imshow('rgb_img', rgb_img)
         cv2.waitKey(0)
-    
+        
         cv2.destroyAllWindows()
     ######################################################################
     # 测试**准备入环**
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         cv2.imshow('rgb_img', rgb_img)
         cv2.waitKey(0)
         print(result)
-    cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
 
     ######################################################################
     # 测试**准备出环**
@@ -90,7 +90,7 @@ if __name__ == '__main__':
             continue
     
         lp, rp = result
-    
+        
         cv2.circle(rgb_img, lp, 3, (0, 0, 255), -1)
         cv2.circle(rgb_img, rp, 3, (255, 0, 0), -1)
         cv2.imshow('bin_img', bin_img)
