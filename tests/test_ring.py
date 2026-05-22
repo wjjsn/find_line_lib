@@ -2,7 +2,7 @@ from find_line_lib.ring import 发现圆坏,准备入环,准备出环
 import cv2
 
 if __name__ == '__main__':
-    rgb_img = cv2.imread('png/found_roundabout.png')
+    rgb_img = cv2.imread('png/found_roundabout.jpg')
     assert rgb_img is not None
 
     gray = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2GRAY)
