@@ -11,7 +11,7 @@ if __name__ == "__main__":
         # 1. 修改了函数名
         h, w = bin_img.shape[:2]
 
-        get_start_point_result = get_start_point(bin_img, (h // 5, w // 2)
+        get_start_point_result = get_start_point(bin_img, (w // 2, h // 2)
             ,direction="horizontal"
         )
 

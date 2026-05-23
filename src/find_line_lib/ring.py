@@ -13,7 +13,7 @@ def 发现圆坏(bin_img: MatLike, spilt: int=9) -> tuple[tuple[int, int], tuple
     min_width = w
     min_width_point:tuple[tuple[int, int], tuple[int, int]]=(0, 0), (0, 0)
     for row in range(start_row, end_row):
-        result = get_start_point(bin_img, start_point=(row, w // 2))
+        result = get_start_point(bin_img, start_point=(w // 2, row))
         if result is not None:
             lp,rp = result
             lx,ly = lp
@@ -35,7 +35,7 @@ def 准备入环(bin_img: MatLike, status_switcher: status_switcher, start_point
     线长对应点索引=[]
 
     for row in range(从多高开始往下扫, h-1, 扫一行跳多少行):
-        result = get_start_point(bin_img, start_point=(row, w // 2))
+        result = get_start_point(bin_img, start_point=(w // 2, row))
         if result is not None:
             lp, rp = result
             线长.append(rp[0] - lp[0])
@@ -76,7 +76,7 @@ def 准备出环(bin_img: MatLike, status_switcher: status_switcher, start_point
     线长对应点索引=[]
 
     for row in range(h-1, 从下往上扫到多高停, 扫一行跳多少行):
-        result = get_start_point(bin_img, start_point=(row, w // 2))
+        result = get_start_point(bin_img, start_point=(w // 2, row))
         if result is not None:
             lp, rp = result
             线长.append(rp[0] - lp[0])

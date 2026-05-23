@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     # 按照新逻辑：在外部只计算一次 start_point
     h, w = bin_img.shape[:2]
-    start_point_result = get_start_point(bin_img, (h-1,w//2))
+    start_point_result = get_start_point(bin_img, (w//2, h-1))
 
     for status in 模型识别状态:
         ss.模型识别 = status

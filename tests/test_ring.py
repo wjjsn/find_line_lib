@@ -36,7 +36,7 @@ if __name__ == '__main__':
         _, bin_img = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
     
         h, w = bin_img.shape[:2]
-        result = get_start_point(bin_img, (h-1, w//2))
+        result = get_start_point(bin_img, (w//2, h-1))
         assert result is not None
         ss = status_switcher()
 
@@ -71,11 +71,11 @@ if __name__ == '__main__':
         _, bin_img = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
         h, w = bin_img.shape[:2]
-        result = get_start_point(bin_img, (h-1, w//2))
+        result = get_start_point(bin_img, (w//2, h-1))
         assert result is not None
         ss = status_switcher()
         
-        result = 准备出环(bin_img, ss, result, 跳变阈值=37, 中点水平距离相差多少算圆坏=19)
+        result = 准备出环(bin_img, ss, result, 跳变阈值=37, 中点水平距离相差多少算圆坏=17)
         if result is None:
             print(f"准备出环失败: {img}, 跳变阈值过高或中点水平距离差值阈值过高，或可能是十字")
             cv2.imshow('bin_img', bin_img)
