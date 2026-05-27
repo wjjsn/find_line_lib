@@ -4,8 +4,8 @@ class 圆坏(Enum):
     class 状态(Enum):
         已发现 = auto()
         准备入环 = auto()
-        # 已入环 = auto()
         准备出环 = auto()
+        即将出环 = auto()
         出环中 = auto()
         未发现 = auto()
     class 类型(Enum):
