@@ -1,2 +1,5 @@
 - 这个文件夹在Windows目录下，请使用`uv.exe add <xxx>`和`uv.exe run <xxx>`来代替`uv`
-- 这个文件夹在Windows目录下，路径是`/mnt/c/Users/wjjsn/Desktop/code/boss`，你应该这样执行命令`cd /mnt/c/Users/wjjsn/Desktop/code/boss && <你要执行的命令>`
+- 需要写注释，不要删除原有的注释。如果注释过时了，应该更正而不是删除
+- 变量名用中文，函数名用中文，commit用中文，commit信息需要遵循约定式提交规范
+- 运行OpenCV图像显示时：窗口400*300，每张图片waitKey(1)一次
+- 图像处理前先统一调整为160*120

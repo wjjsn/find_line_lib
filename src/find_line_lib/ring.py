@@ -68,6 +68,8 @@ def 准备入环(bin_img: MatLike, status_switcher: status_switcher, start_point
             else:
                 print("突变过小，可能是十字")
                 return None
+    else:
+        print("线长变化不满足跳变阈值")
 
 def 准备出环(bin_img: MatLike, status_switcher: status_switcher, start_point: tuple[tuple[int, int], tuple[int, int]], 跳变阈值: int=40, 从下往上扫到多高停: int=70, 扫一行跳多少行: int=-8, 中点水平距离相差多少算圆坏: int=20) -> tuple[tuple[int, int], tuple[int, int]] | None:
     h, w = bin_img.shape[:2]
@@ -91,6 +93,9 @@ def 准备出环(bin_img: MatLike, status_switcher: status_switcher, start_point
             突变前中点=((线长对应点索引[i-1][0][0] + 线长对应点索引[i-1][1][0]) // 2),((线长对应点索引[i-1][0][1] + 线长对应点索引[i-1][1][1]) // 2)
             突变后中点=((线长对应点索引[i][0][0] + 线长对应点索引[i][1][0]) // 2),((线长对应点索引[i][0][1] + 线长对应点索引[i][1][1]) // 2)
             print(f"突变前中点: {突变前中点}, 突变后中点: {突变后中点}")
+            cv2.line(bin_img, 突变前中点, 突变后中点, 0, 2)
+            cv2.imshow('debug', bin_img)
+            cv2.waitKey(0)
 
             # 检测突变前后中点的水平距离，过小则可能是十字而不是圆坏
             if 突变前中点[0] - 突变后中点[0] > 中点水平距离相差多少算圆坏:
