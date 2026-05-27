@@ -177,11 +177,12 @@ def 检测圆环(骨架图):
         return 结果
 
     # 遍历所有轮廓，找到有子轮廓的（内孔）
+    最小面积 = 160 * 120 * 0.1
     for i in range(len(contours)):
         # hierarchy[0][i][3] != -1 表示有父轮廓（即这是内孔）
         if hierarchy[0][i][3] != -1:
             内孔面积 = cv2.contourArea(contours[i])
-            if 内孔面积 > 150:  # 过滤噪点
+            if 内孔面积 > 最小面积:  # 过滤噪点
                 x, y, w, h = cv2.boundingRect(contours[i])
                 中心x = x + w // 2
                 结果['有闭合环'] = True
